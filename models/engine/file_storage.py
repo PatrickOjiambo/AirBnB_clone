@@ -3,8 +3,17 @@
 This module contains the process of serialization
 and deserialisation of instances to instances and back.
 """
+
 import json
 import os
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.review import Review
+from models.amenity import Amenity
+from models.place import Place
+
 class FileStorage:
     """
     serializes instances to a JSON file and
@@ -29,17 +38,12 @@ class FileStorage:
         """
         serializes __objects to the JSON file (path: __file_path)
         """
-        with open(self.__file_path, "a") as file:
+        with open(FileStorage.__file_path, "w") as file:
             data = {key: value.to_dict() for key, value in FileStorage.__objects.items()}
             json.dump(data, file)
 
-    def classes(self):
-        """Returns a dictionary of valid classes and their references."""
-        from models.base_model import BaseModel
-        classes = {
-            "BaseModel": BaseModel()
-        }
-        return classes
+    
+
 
     def reload(self):
         
@@ -48,15 +52,24 @@ class FileStorage:
         file (__file_path) exists ; otherwise, do nothing. If the
         file doesn't exist, no exception should be raised)
         """
-        # if os.path.exists(FileStorage.__file_path):
-        #     with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
-        #         my_return = json.load(file)
-        #         my_return = {key: self.classes()[value["__class__"]](**value) for key, value in obj_dict.items()}
-        #         FileStorage.__objects = my_return                
-        # else:
-        #     return
-        pass
-    
+        current_classes = {'BaseModel': BaseModel, 'User': User,
+                           'Amenity': Amenity, 'City': City, 'State': State,
+                           'Place': Place, 'Review': Review}
+        
+        try:
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+                print(FileStorage.__objects)
+                FileStorage.__objects = {
+                k: current_classes[k.split('.')[0]](**v)
+                for k, v in data.items()}
+        except Exception:
+            pass
+        
+
+        
+
+        
     def object_setter(self, object):
         """Setter for the variable __objects"""
         FileStorage.__objects = object
