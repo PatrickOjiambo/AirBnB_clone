@@ -66,10 +66,6 @@ class FileStorage:
         except Exception:
             pass
         
-
-        
-
-        
     def object_setter(self, object):
         """Setter for the variable __objects"""
         FileStorage.__objects = object
