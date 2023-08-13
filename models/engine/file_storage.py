@@ -59,16 +59,11 @@ class FileStorage:
         try:
             with open(FileStorage.__file_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
-                print(FileStorage.__objects)
                 FileStorage.__objects = {
                 k: current_classes[k.split('.')[0]](**v)
                 for k, v in data.items()}
         except Exception:
             pass
-        
-    def object_setter(self, object):
-        """Setter for the variable __objects"""
-        FileStorage.__objects = object
-        
+              
         
 
