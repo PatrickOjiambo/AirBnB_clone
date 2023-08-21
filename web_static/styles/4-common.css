@@ -2,6 +2,7 @@
     max-width: 1000px;
     margin: 30px;
     display: flex;
+    flex-direction: column;
    margin-left: auto;
    margin-right: auto;
 }
